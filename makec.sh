@@ -1,3 +1,3 @@
 #!/bin/bash
 mkdir -p bin/
-tcc -o bin/mtalc src/*.c
+tcc -o bin/mtalc csrc/*.c
