@@ -3,35 +3,47 @@
 
 #include "bytebuf.h"
 #include "ptrbuf.h"
+#include "lexer.h"
+#include "token.h"
 
 int main(int argc, char** argv) {
-	struct mt_ptrbuf lines;
-	if (mt_ptrbuf_init(&lines)) {
-		printf("main: mt_ptrbuf_init failed\n");
-		return -1;
+	struct bytebuf src;
+	if (bytebuf_init(&src)) return -1;
+
+	while (1) {
+		int c;
+		if ((c = getchar()) == EOF) break;
+		if (bytebuf_push(&src, c)) return -1;
 	}
 
-	char charbuf[256];
-	struct mt_bytebuf* line;
-	while (1) {
-		if (fgets(charbuf, sizeof(charbuf), stdin) == NULL) {
-			break;
-		}
+	struct lexer lexer;
+	lexer_init(&lexer, src.buf);
 
-		line = malloc(sizeof(struct mt_bytebuf));
-		if (!line) {
+	struct ptrbuf tokens;
+	if (ptrbuf_init(&tokens)) return -1;
+
+	while (1) {
+		struct token* token = malloc(sizeof(struct token));
+		if (!token) {
 			printf("main: malloc failed\n");
 			return -1;
 		}
-		if (mt_bytebuf_init(line)) {
-			printf("main: mt_bytebuf_init failed\n");
-			return -1;
+		if (token_parse(token, &lexer)) {
+			free(token);
+			break;
 		}
-
-		do {
-			
-		}
-
+		if (ptrbuf_push(&tokens, token)) return -1;
 	}
+	printf("main: escaped loop, parsed %d\n", tokens.len);
+
+	for (int i=0; i<tokens.len; i++) {
+		struct token* token = tokens.buf[i];
+		printf("%s\n", token->tokens.word.word);
+		token_free(token);
+		free(token);
+	}
+
+	ptrbuf_free(&tokens);
+	bytebuf_free(&src);
 	return 0;
 }

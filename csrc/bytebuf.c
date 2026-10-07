@@ -5,25 +5,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int mt_bytebuf_init(struct mt_bytebuf* buf)
+int bytebuf_init(struct bytebuf* buf)
 {
 	buf->len = 0;
 	buf->sz = 16;
 	buf->buf = malloc(buf->sz);
 	if (!buf->buf) {
-		printf("mt_bytebuf_init: malloc failed\n");
+		printf("bytebuf_init: malloc failed\n");
 		return -1;
 	}
 	return 0;
 }
 
-void mt_bytebuf_free(struct mt_bytebuf* buf)
+void bytebuf_free(struct bytebuf* buf)
 {
 	free(buf->buf);
 	buf->buf = NULL;
 }
 
-int mt_bytebuf_pushbuf(struct mt_bytebuf* buf, uint8_t* src, size_t len)
+int bytebuf_pushbuf(struct bytebuf* buf, uint8_t* src, size_t len)
 {
 	size_t newlen = buf->len + len;
 	if (buf->sz < newlen) {
@@ -33,7 +33,7 @@ int mt_bytebuf_pushbuf(struct mt_bytebuf* buf, uint8_t* src, size_t len)
 
 		uint8_t* newbuf = realloc(buf->buf, buf->sz);
 		if (!newbuf) {
-			printf("mt_bytebuf_pushbuf: malloc failed\n");
+			printf("bytebuf_pushbuf: malloc failed\n");
 			return -1;
 		}
 		buf->buf = newbuf;
@@ -41,5 +41,23 @@ int mt_bytebuf_pushbuf(struct mt_bytebuf* buf, uint8_t* src, size_t len)
 	for (size_t i=0; i<len; i++) {
 		buf->buf[buf->len++] = src[i];
 	}
+	return 0;
+}
+
+int bytebuf_push(struct bytebuf* buf, uint8_t src)
+{
+	if (buf->len >= buf->sz) {
+		do {
+			buf->sz <<= 1;
+		} while (buf->len >= buf->sz);
+
+		uint8_t* newbuf = realloc(buf->buf, buf->sz);
+		if (!newbuf) {
+			printf("bytebuf_push: malloc failed\n");
+			return -1;
+		}
+		buf->buf = newbuf;
+	}
+	buf->buf[buf->len++] = src;
 	return 0;
 }
