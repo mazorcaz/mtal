@@ -28,24 +28,22 @@ int token_parse_word(struct token* token, struct lexer* lexer)
 
 	char c = lexer_peek(&new);
 
-	if (!isalpha(c) && c != '_')
-		return -1;
+	if (!isalpha(c) && c != '_') return -1;
 
 	token->type = TOKEN_WORD;
 	struct token_word* word = &token->tokens.word;
 	
 	struct bytebuf buf;
-	if (bytebuf_init(&buf))
-		return -1;
+	if (bytebuf_init(&buf)) return -1;
 	
 	while (1) {
 		c = lexer_peek(&new);
-		if (!isalnum(c) && c != '_')
-			break;
+		if (!isalnum(c) && c != '_') break;
 		lexer_next(&new);
-		if (bytebuf_push(&buf, c))
-			return -1;
+		if (bytebuf_push(&buf, c)) return -1;
 	}
+
+	if (bytebuf_push(&buf, 0)) return -1;
 
 	word->word = buf.buf;
 	*lexer = new;
@@ -54,9 +52,7 @@ int token_parse_word(struct token* token, struct lexer* lexer)
 
 int token_parse(struct token* token, struct lexer* lexer)
 {
-	if (token_parse_word(token, lexer)) {
-		return -1;
-	}
+	if (token_parse_word(token, lexer)) return -1;
 	
 	return 0;
 }
