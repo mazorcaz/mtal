@@ -6,7 +6,7 @@ while being ABI compatible.
 ## Hello World
 
 ```
-$inc ctypes.h
+#include <ctypes.h>
 
 cint_t printf(cchar_t*);
 
