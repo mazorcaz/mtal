@@ -35,8 +35,6 @@ int main(int argc, char** argv) {
 		} else {
 			printf("UNKNOWN (%i)\n", token->type);
 		}
-		token_free(token);
-		free(token);
 	}
 
 exit:
