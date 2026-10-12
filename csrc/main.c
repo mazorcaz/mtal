@@ -13,11 +13,12 @@ int main(int argc, char** argv) {
 	while (1) {
 		int c;
 		if ((c = getchar()) == EOF) break;
-		if (!bytebuf_push(&src, c)) return -1;
+		if (!bytebuf_push(&src, c)) goto exit_src;
 	}
+	if (!bytebuf_push(&src, 0)) goto exit_src;
 
 	struct lexer lexer;
-	if (!lexer_init(&lexer, src.buf)) return -1;
+	if (!lexer_init(&lexer, src.buf)) goto exit_src;
 
 	while (1) {
 		int eof;
@@ -39,6 +40,7 @@ int main(int argc, char** argv) {
 
 exit_lexer:
 	lexer_free(&lexer);
+exit_src:
 	bytebuf_free(&src);
 	return 0;
 }
