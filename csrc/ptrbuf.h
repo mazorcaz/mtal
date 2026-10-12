@@ -12,7 +12,7 @@ struct ptrbuf {
 	void** buf;
 };
 
-int ptrbuf_init(struct ptrbuf* buf); // 0 on success
+int ptrbuf_init(struct ptrbuf* buf); // 0 on fail
 void ptrbuf_free(struct ptrbuf* buf); // does NOT free entries
 
 int ptrbuf_push(struct ptrbuf* buf, void* dat);

@@ -12,9 +12,9 @@ int bytebuf_init(struct bytebuf* buf)
 	buf->buf = malloc(buf->sz);
 	if (!buf->buf) {
 		printf("bytebuf_init: malloc failed\n");
-		return -1;
+		return 0;
 	}
-	return 0;
+	return 1;
 }
 
 void bytebuf_free(struct bytebuf* buf)
@@ -34,14 +34,14 @@ int bytebuf_pushbuf(struct bytebuf* buf, uint8_t* src, size_t len)
 		uint8_t* newbuf = realloc(buf->buf, buf->sz);
 		if (!newbuf) {
 			printf("bytebuf_pushbuf: malloc failed\n");
-			return -1;
+			return 0;
 		}
 		buf->buf = newbuf;
 	}
 	for (size_t i=0; i<len; i++) {
 		buf->buf[buf->len++] = src[i];
 	}
-	return 0;
+	return 1;
 }
 
 int bytebuf_push(struct bytebuf* buf, uint8_t src)
@@ -54,10 +54,10 @@ int bytebuf_push(struct bytebuf* buf, uint8_t src)
 		uint8_t* newbuf = realloc(buf->buf, buf->sz);
 		if (!newbuf) {
 			printf("bytebuf_push: malloc failed\n");
-			return -1;
+			return 0;
 		}
 		buf->buf = newbuf;
 	}
 	buf->buf[buf->len++] = src;
-	return 0;
+	return 1;
 }

@@ -5,16 +5,30 @@
 
 #include <stddef.h>
 
+#include "token.h"
+#include "ptrbuf.h"
+#include "bytebuf.h"
+
+#define LEXER_START 1
+#define LEXER_DIGIT 2
+#define LEXER_IDENT 3
+
 struct lexer {
 	char* src; // does not own
 	char* ptr;
 	size_t line;
+	int mode;
+
+	struct ptrbuf tokens; // owns
+	struct bytebuf string;
+
+	struct token* token; // current token
 };
 
-void lexer_init(struct lexer* lexer, char* src);
+// 1 on success
+int lexer_init(struct lexer* lexer, char* src);
+void lexer_free(struct lexer* lexer);
 
-char lexer_peek(struct lexer* lexer);
-char lexer_next(struct lexer* lexer);
-void lexer_skipspace(struct lexer* lexer);
+int lexer_next(struct lexer* lexer, int* iseof);
 
 #endif

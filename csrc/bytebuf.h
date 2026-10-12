@@ -12,7 +12,7 @@ struct bytebuf {
 	uint8_t* buf;
 };
 
-int bytebuf_init(struct bytebuf* buf); // 0 if success
+int bytebuf_init(struct bytebuf* buf); // 0 on fail
 void bytebuf_free(struct bytebuf* buf);
 
 int bytebuf_pushbuf(struct bytebuf* buf, uint8_t* src, size_t len);

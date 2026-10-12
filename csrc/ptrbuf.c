@@ -12,9 +12,9 @@ int ptrbuf_init(struct ptrbuf* buf)
 	buf->buf = malloc(buf->sz * sizeof(void*));
 	if (!buf->buf) {
 		printf("ptrbuf_init: malloc failed\n");
-		return -1;
+		return 0;
 	}
-	return 0;
+	return 1;
 }
 
 void ptrbuf_free(struct ptrbuf* buf)
@@ -32,11 +32,11 @@ int ptrbuf_push(struct ptrbuf* buf, void* dat) {
 		void** newbuf = realloc(buf->buf, buf->sz * sizeof(void*));
 		if (!newbuf) {
 			printf("ptrbuf_push: malloc failed\n");
-			return -1;
+			return 0;
 		}
 		buf->buf = newbuf;
 	}
 	buf->buf[buf->len++] = dat;
-	return 0;
+	return 1;
 }
 		
