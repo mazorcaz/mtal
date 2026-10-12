@@ -16,12 +16,11 @@
 struct lexer {
 	char* src; // does not own
 	char* ptr;
+	char* tokenptr;
 	size_t line;
 	int mode;
 
 	struct ptrbuf tokens; // owns
-	struct bytebuf string;
-
 	struct token* token; // current token
 };
 

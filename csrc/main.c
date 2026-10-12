@@ -28,7 +28,13 @@ int main(int argc, char** argv) {
 
 	for (int i=0; i<lexer.tokens.len; i++) {
 		struct token* token = lexer.tokens.buf[i];
-		printf("%i\n", token->type);
+		if (token->type == TOKEN_IDENT) {
+			printf("IDENT '%s'\n", token->types.ident.string);
+		} else if (token->type == TOKEN_NUM) {
+			printf("NUM %i\n", token->types.num.num);
+		} else {
+			printf("UNKNOWN (%i)\n", token->type);
+		}
 		token_free(token);
 		free(token);
 	}
