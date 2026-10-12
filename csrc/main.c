@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 
 	while (1) {
 		int eof;
-		if (!lexer_next(&lexer, &eof)) goto exit;
+		if (!lexer_next(&lexer, &eof)) goto exit_lexer;
 		if (eof) break;
 	}
 	printf("main: escaped loop, parsed %d\n", lexer.tokens.len);
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
-exit:
+exit_lexer:
 	lexer_free(&lexer);
 	bytebuf_free(&src);
 	return 0;

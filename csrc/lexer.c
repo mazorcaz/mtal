@@ -41,7 +41,6 @@ int lexer_next(struct lexer* lexer, int* iseof)
 		*iseof = 1;
 		return 1;
 	}
-	if (c == '\n') lexer->line++;
 	*iseof = 0;
 
 	switch (lexer->mode) {
@@ -54,7 +53,7 @@ int lexer_next(struct lexer* lexer, int* iseof)
 		} else if (isalpha(c) || c == '_') {
 			lexer->mode = LEXER_IDENT;
 			goto tokenstart;
-		} else { printf("Invalid character '%c'\n", c);
+		} else { printf("Invalid character '%c' (0x%x) at line %i\n", c, c, lexer->line);
 			return 0;
 		}
 	case LEXER_DIGIT:
@@ -95,6 +94,7 @@ tokenend:
 tokenstart:
 	lexer->tokenptr = lexer->ptr;
 inc:
+	if (c == '\n') lexer->line++;
 	lexer->ptr++;
 	return 1;
 }
