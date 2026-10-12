@@ -14,6 +14,7 @@ void token_free(struct token* token)
 		token->types.ident.string = NULL;
 		break;
 	case TOKEN_NUM:
+	case TOKEN_OP:
 		break;
 	default:
 		return;

@@ -11,7 +11,8 @@
 
 #define LEXER_START 1
 #define LEXER_DIGIT 2
-#define LEXER_IDENT 3
+#define LEXER_NEG 3
+#define LEXER_IDENT 4
 
 struct lexer {
 	char* src; // does not own

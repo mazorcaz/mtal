@@ -33,6 +33,14 @@ int main(int argc, char** argv) {
 			printf("IDENT '%s'\n", token->types.ident.string);
 		} else if (token->type == TOKEN_NUM) {
 			printf("NUM %i\n", token->types.num.num);
+		} else if (token->type == TOKEN_OP) {
+			if (token->types.op.type == TOKEN_OP_PLUS) {
+				printf("OP +\n");
+			} else if (token->types.op.type == TOKEN_OP_MINUS) {
+				printf("OP -\n");
+			} else {
+				printf("OP UNKNOWN (%i)\n", token->types.op.type);
+			}
 		} else {
 			printf("UNKNOWN (%i)\n", token->type);
 		}

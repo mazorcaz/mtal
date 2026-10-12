@@ -50,6 +50,9 @@ int lexer_next(struct lexer* lexer, int* iseof)
 		} else if (isdigit(c)) {
 			lexer->mode = LEXER_DIGIT;
 			goto tokenstart;
+		} else if (c == '-') {
+			lexer->mode = LEXER_NEG;
+			goto tokenstart;
 		} else if (isalpha(c) || c == '_') {
 			lexer->mode = LEXER_IDENT;
 			goto tokenstart;
@@ -60,7 +63,18 @@ int lexer_next(struct lexer* lexer, int* iseof)
 		if (isdigit(c)) {
 			goto inc;
 		} else {
+			char* endptr;
+			lexer->token->types.num.num = strtoll(lexer->tokenptr, &endptr, 10);
 			lexer->token->type = TOKEN_NUM;
+			goto tokenend;
+		}
+	case LEXER_NEG:
+		if (isdigit(c)) {
+			lexer->mode = LEXER_DIGIT;
+			goto inc;
+		} else {
+			lexer->token->types.op.type = TOKEN_OP_MINUS;
+			lexer->token->type = TOKEN_OP;
 			goto tokenend;
 		}
 	case LEXER_IDENT:
